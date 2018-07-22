@@ -1,5 +1,7 @@
 package com.github.dvriesman.bitsotrade.service.websocket;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.dvriesman.bitsotrade.model.domain.DiffOrder;
 import org.glassfish.tyrus.client.ClientManager;
 import org.json.JSONObject;
 
@@ -12,6 +14,7 @@ import java.util.concurrent.CountDownLatch;
 @ClientEndpoint
 public class WebsocketEndpoint {
 
+    private static String ENDPOINT_URI = "wss://ws.bitso.com";
     private static CountDownLatch latch;
 
     @OnOpen
@@ -29,7 +32,17 @@ public class WebsocketEndpoint {
 
     @OnMessage
     public String onMessage(String message, Session session) {
-        System.out.println(message);
+
+        if (message.indexOf("subscribe") <= 0) {
+            try {
+                DiffOrder diffOrder = new ObjectMapper().readerFor(DiffOrder.class).readValue(message);
+                System.out.println(diffOrder.getSequence());
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
         return "OK";
     }
 
@@ -45,14 +58,14 @@ public class WebsocketEndpoint {
                 latch = new CountDownLatch(1);
                 ClientManager client = ClientManager.createClient();
                 try {
-                    client.connectToServer(WebsocketEndpoint.class, new URI("wss://ws.bitso.com"));
+                    client.connectToServer(WebsocketEndpoint.class, new URI(ENDPOINT_URI));
                     latch.await();
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
             }
         }.start();
-
     }
+
 
 }
