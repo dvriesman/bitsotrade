@@ -1,5 +1,6 @@
 package com.github.dvriesman.bitsotrade.model.rest;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dvriesman.bitsotrade.model.domain.BookEntity;
 
 import java.math.BigInteger;
@@ -11,6 +12,7 @@ public class OrderBookPayload {
     private List<BookEntity> asks;
     private List<BookEntity> bids;
 
+    @JsonProperty("updated_at")
     Date updatedAt;
 
     BigInteger sequence;

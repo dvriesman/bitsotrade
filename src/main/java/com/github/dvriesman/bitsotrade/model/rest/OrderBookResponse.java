@@ -3,7 +3,7 @@ package com.github.dvriesman.bitsotrade.model.rest;
 public class OrderBookResponse {
 
     private Boolean success;
-    private OrderBookPayload orderBookPayload;
+    private OrderBookPayload payload;
 
     public Boolean getSuccess() {
         return success;
@@ -13,11 +13,11 @@ public class OrderBookResponse {
         this.success = success;
     }
 
-    public OrderBookPayload getOrderBookPayload() {
-        return orderBookPayload;
+    public OrderBookPayload getPayload() {
+        return payload;
     }
 
-    public void setOrderBookPayload(OrderBookPayload orderBookPayload) {
-        this.orderBookPayload = orderBookPayload;
+    public void setPayload(OrderBookPayload payload) {
+        this.payload = payload;
     }
 }
