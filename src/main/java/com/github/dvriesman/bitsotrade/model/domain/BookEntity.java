@@ -6,8 +6,8 @@ public class BookEntity {
 
     private String oid;
     private String book;
-    private Double price;
-    private Double amount;
+    private Double price = 0.0;
+    private Double amount = 0.0;
 
     public BookEntity() {
 
@@ -58,7 +58,7 @@ public class BookEntity {
 
     @Override
     public String toString() {
-        return String.format("%1s -  %2$,.8f  |  %3$,.2f", oid, amount, price);
+        return String.format("%1$,.8f  |  %2$,.2f", amount, price);
 
     }
 

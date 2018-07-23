@@ -10,11 +10,15 @@ import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.SortedList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderBookDataProvider {
@@ -27,6 +31,9 @@ public class OrderBookDataProvider {
     protected ListProperty<BookEntity> asks = new SimpleListProperty<>();
     protected ListProperty<BookEntity> bids = new SimpleListProperty<>();
 
+    private List<BookEntity> askList;
+    private List<BookEntity> bidList;
+
 
     public ListProperty<BookEntity> getAsks() {
         return asks;
@@ -36,17 +43,34 @@ public class OrderBookDataProvider {
         return bids;
     }
 
+    private List<BookEntity> getSortList(List<BookEntity> list) {
+        try {
+            return list.stream().sorted(Comparator.comparing(BookEntity::getPrice)
+            ).limit(20).collect(Collectors.toList());
+        } catch (Exception e) {
+            System.out.println(list);
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public void init() {
         OrderBookResponse orderBook = restClientFacade.getOrderBook();
         currentSequence = orderBook.getPayload().getSequence();
-        asks.set(FXCollections.observableArrayList(orderBook.getPayload().getAsks()));
-        bids.set(FXCollections.observableArrayList(orderBook.getPayload().getBids()));
+
+        askList = orderBook.getPayload().getAsks();
+
+        bidList = orderBook.getPayload().getBids();
+
+        asks.set(FXCollections.observableArrayList(getSortList(askList)));
+        bids.set(FXCollections.observableArrayList(getSortList(bidList)));
+
     }
 
 
     public void updateOrderBook(DiffOrder diffOrder) {
         if (currentSequence != null && diffOrder != null) {
-            if (diffOrder.getSequence().compareTo(currentSequence) > 0) {
+            if (diffOrder.getSequence() != null && diffOrder.getSequence().compareTo(currentSequence) > 0) {
                 List<DiffOrderPayload> payload = diffOrder.getPayload();
                 if (payload != null) {
                     payload.stream().forEach(e -> updateBook(e));
@@ -63,20 +87,28 @@ public class OrderBookDataProvider {
                 switch (e.getStatus()) {
                     case CANCELLED: {
                         if (e.getType().equals(OpTypeEnum.BUY)) {
-                            asks.remove(new BookEntity(e.getId()));
+                            askList.remove(new BookEntity(e.getId()));
+                            asks.set(FXCollections.observableArrayList(getSortList(askList)));
                         } else {
-                            bids.remove(new BookEntity(e.getId()));
+                            bidList.remove(new BookEntity(e.getId()));
+                            bids.set(FXCollections.observableArrayList(getSortList(bidList)));
                         }
                         System.out.println("Cancelled!");
+                        break;
                     }
 
                     case OPEN: {
                         if (e.getType().equals(OpTypeEnum.BUY)) {
-                            asks.add(new BookEntity(e.getId(), "btc_mxn", e.getValue(), e.getAmount()));
+
+                            askList.add(new BookEntity(e.getId(), "btc_mxn", e.getValue(), e.getAmount()));
+                            asks.set(FXCollections.observableArrayList(getSortList(askList)));
+
                         } else {
-                            bids.add(new BookEntity(e.getId(), "btc_mxn", e.getValue(), e.getAmount()));
+                            bidList.add(new BookEntity(e.getId(), "btc_mxn", e.getValue(), e.getAmount()));
+                            bids.set(FXCollections.observableArrayList(getSortList(bidList)));
                         }
                         System.out.println("Open!");
+                        break;
                     }
                 }
 

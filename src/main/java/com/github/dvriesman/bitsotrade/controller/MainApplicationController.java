@@ -44,6 +44,7 @@ public class MainApplicationController implements Initializable {
         orderBookDataProvider.init();
 
         asksListView.itemsProperty().bind(orderBookDataProvider.getAsks());
+
         bidsListView.itemsProperty().bind(orderBookDataProvider.getBids());
 
     }
