@@ -6,12 +6,10 @@ import com.github.dvriesman.bitsotrade.model.domain.DiffOrderPayload;
 import com.github.dvriesman.bitsotrade.model.rest.OrderBookResponse;
 import com.github.dvriesman.bitsotrade.model.types.OpTypeEnum;
 import com.github.dvriesman.bitsotrade.service.rest.RestClientFacade;
-import com.github.dvriesman.bitsotrade.service.websocket.WebsocketEndpoint;
 import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,7 +45,7 @@ public class OrderBookDataProvider {
 
 
     public void updateOrderBook(DiffOrder diffOrder) {
-        if (diffOrder != null) {
+        if (currentSequence != null && diffOrder != null) {
             if (diffOrder.getSequence().compareTo(currentSequence) > 0) {
                 List<DiffOrderPayload> payload = diffOrder.getPayload();
                 if (payload != null) {

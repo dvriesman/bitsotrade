@@ -1,7 +1,6 @@
 package com.github.dvriesman.bitsotrade;
 
 import com.github.dvriesman.bitsotrade.service.rest.RestClientFacade;
-import com.github.dvriesman.bitsotrade.service.websocket.WebsocketEndpoint;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -38,8 +37,6 @@ public class MainApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-
-        //WebsocketEndpoint.startWebSocket();
 
         primaryStage.setTitle("Bitsontrade");
         primaryStage.setScene(new Scene(rootNode));
