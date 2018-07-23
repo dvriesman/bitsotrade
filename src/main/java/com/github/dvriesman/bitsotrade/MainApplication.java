@@ -1,5 +1,6 @@
 package com.github.dvriesman.bitsotrade;
 
+import com.github.dvriesman.bitsotrade.service.websocket.WebsocketEndpoint;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,6 +12,9 @@ public class MainApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
+        WebsocketEndpoint.startWebSocket();
+
         Parent root = FXMLLoader.load(getClass().getResource("/com/github/dvriesman/bitsotrade/view/Application.fxml"));
         primaryStage.setTitle("Bitsontrade");
         primaryStage.setScene(new Scene(root));

@@ -26,7 +26,7 @@ public class RestClientFacade {
     }
 
     public OrderBookResponse getOrderBook() {
-        Call<OrderBookResponse> call = orderBookService.getOrderBook(FIXED_CURRENCY);
+        Call<OrderBookResponse> call = orderBookService.getOrderBook(FIXED_CURRENCY, false);
         try {
             Response<OrderBookResponse> resp = call.execute();
             OrderBookResponse body = resp.body();

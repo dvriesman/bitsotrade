@@ -2,6 +2,7 @@ package com.github.dvriesman.bitsotrade.service.websocket;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dvriesman.bitsotrade.model.domain.DiffOrder;
+import com.github.dvriesman.bitsotrade.provider.OrderBookDataProvider;
 import org.glassfish.tyrus.client.ClientManager;
 import org.json.JSONObject;
 
@@ -31,19 +32,15 @@ public class WebsocketEndpoint {
     }
 
     @OnMessage
-    public String onMessage(String message, Session session) {
-
+    public void onMessage(String message, Session session) {
         if (message.indexOf("subscribe") <= 0) {
             try {
                 DiffOrder diffOrder = new ObjectMapper().readerFor(DiffOrder.class).readValue(message);
-                System.out.println(diffOrder.getSequence());
-
+                OrderBookDataProvider.getOrderBookDataProvider().updateOrderBook(diffOrder);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
-
-        return "OK";
     }
 
     @OnClose

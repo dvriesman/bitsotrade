@@ -8,6 +8,6 @@ import retrofit2.http.Query;
 public interface OrderBookService {
 
     @GET("order_book")
-    Call<OrderBookResponse> getOrderBook(@Query("book") String book);
+    Call<OrderBookResponse> getOrderBook(@Query("book") String book, @Query("aggregate") Boolean aggregate);
 
 }

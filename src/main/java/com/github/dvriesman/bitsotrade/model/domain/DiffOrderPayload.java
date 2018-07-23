@@ -26,10 +26,10 @@ public class DiffOrderPayload {
     private BigDecimal rate;
 
     @JsonProperty("a")
-    private BigDecimal amount;
+    private Double amount;
 
     @JsonProperty("v")
-    private BigDecimal value;
+    private Double value;
 
     @JsonProperty("s")
     @JsonDeserialize(using=JsonUtil.StatusDeserializer.class)
@@ -67,27 +67,27 @@ public class DiffOrderPayload {
         this.rate = rate;
     }
 
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
-    public BigDecimal getValue() {
-        return value;
-    }
-
-    public void setValue(BigDecimal value) {
-        this.value = value;
-    }
-
     public StatusEnum getStatus() {
         return status;
     }
 
     public void setStatus(StatusEnum status) {
         this.status = status;
+    }
+
+    public Double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Double amount) {
+        this.amount = amount;
+    }
+
+    public Double getValue() {
+        return value;
+    }
+
+    public void setValue(Double value) {
+        this.value = value;
     }
 }
