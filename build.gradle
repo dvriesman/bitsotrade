@@ -20,6 +20,7 @@ repositories {
 
 dependencies {
 
+    compile "org.springframework.boot:spring-boot-starter:2.0.3.RELEASE"
     compile "com.squareup.retrofit2:retrofit:2.4.0"
     compile "com.squareup.retrofit2:converter-jackson:2.4.0"
 

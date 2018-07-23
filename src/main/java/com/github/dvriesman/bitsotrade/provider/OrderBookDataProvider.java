@@ -8,46 +8,43 @@ import com.github.dvriesman.bitsotrade.model.types.OpTypeEnum;
 import com.github.dvriesman.bitsotrade.service.rest.RestClientFacade;
 import com.github.dvriesman.bitsotrade.service.websocket.WebsocketEndpoint;
 import javafx.application.Platform;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.util.List;
 
+@Service
 public class OrderBookDataProvider {
-
-    private static OrderBookDataProvider instance;
 
     private BigInteger currentSequence;
 
-    private List<BookEntity> asks;
-    private List<BookEntity> bids;
+    @Autowired
+    private RestClientFacade restClientFacade;
 
-    public List<BookEntity> getAsks() {
+    protected ListProperty<BookEntity> asks = new SimpleListProperty<>();
+    protected ListProperty<BookEntity> bids = new SimpleListProperty<>();
+
+
+    public ListProperty<BookEntity> getAsks() {
         return asks;
     }
 
-    public void setAsks(List<BookEntity> asks) {
-        this.asks = asks;
-    }
-
-    public List<BookEntity> getBids() {
+    public ListProperty<BookEntity> getBids() {
         return bids;
     }
 
-    public void setBids(List<BookEntity> bids) {
-        this.bids = bids;
-    }
-
-    private OrderBookDataProvider() {
-
-        OrderBookResponse orderBook = RestClientFacade.getInstance().getOrderBook();
+    public void init() {
+        OrderBookResponse orderBook = restClientFacade.getOrderBook();
         currentSequence = orderBook.getPayload().getSequence();
-        asks = orderBook.getPayload().getAsks();
-        bids = orderBook.getPayload().getBids();
+        asks.set(FXCollections.observableArrayList(orderBook.getPayload().getAsks()));
+        bids.set(FXCollections.observableArrayList(orderBook.getPayload().getBids()));
     }
 
-    public static OrderBookDataProvider getOrderBookDataProvider() {
-        return instance == null ? (instance = new OrderBookDataProvider()) : instance;
-    }
 
     public void updateOrderBook(DiffOrder diffOrder) {
         if (diffOrder != null) {

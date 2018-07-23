@@ -5,6 +5,7 @@ import com.github.dvriesman.bitsotrade.model.domain.DiffOrder;
 import com.github.dvriesman.bitsotrade.provider.OrderBookDataProvider;
 import org.glassfish.tyrus.client.ClientManager;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.websocket.*;
 import java.io.IOException;
@@ -17,6 +18,9 @@ public class WebsocketEndpoint {
 
     private static String ENDPOINT_URI = "wss://ws.bitso.com";
     private static CountDownLatch latch;
+
+    @Autowired
+    private OrderBookDataProvider orderBookDataProvider;
 
     @OnOpen
     public void onOpen(Session session) {
@@ -36,7 +40,7 @@ public class WebsocketEndpoint {
         if (message.indexOf("subscribe") <= 0) {
             try {
                 DiffOrder diffOrder = new ObjectMapper().readerFor(DiffOrder.class).readValue(message);
-                OrderBookDataProvider.getOrderBookDataProvider().updateOrderBook(diffOrder);
+                orderBookDataProvider.updateOrderBook(diffOrder);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

@@ -10,11 +10,17 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
+@Component
 public class MainApplicationController implements Initializable {
+
+    @Autowired
+    private OrderBookDataProvider orderBookDataProvider;
 
     @FXML
     private ListView<BookEntity> asksListView;
@@ -25,22 +31,20 @@ public class MainApplicationController implements Initializable {
     @FXML
     private Button btnTest;
 
-    protected ListProperty<BookEntity> asksListProperty = new SimpleListProperty<>();
-    protected ListProperty<BookEntity> bidsListProperty = new SimpleListProperty<>();
 
 
     @FXML
     protected void onClick(ActionEvent event) {
 
+
     }
 
     public void initialize(URL location, ResourceBundle resourceBundle) {
 
-        asksListProperty.set(FXCollections.observableArrayList(OrderBookDataProvider.getOrderBookDataProvider().getAsks()));
-        asksListView.itemsProperty().bind(asksListProperty);
+        orderBookDataProvider.init();
 
-        bidsListProperty.set(FXCollections.observableArrayList(OrderBookDataProvider.getOrderBookDataProvider().getBids()));
-        bidsListView.itemsProperty().bind(bidsListProperty);
+        asksListView.itemsProperty().bind(orderBookDataProvider.getAsks());
+        bidsListView.itemsProperty().bind(orderBookDataProvider.getBids());
 
     }
 
