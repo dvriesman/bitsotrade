@@ -44,26 +44,25 @@ public class OrderBookDataProvider {
     }
 
     private List<BookEntity> getSortList(List<BookEntity> list) {
-        try {
-            return list.stream().sorted(Comparator.comparing(BookEntity::getPrice)
-            ).limit(20).collect(Collectors.toList());
-        } catch (Exception e) {
-            System.out.println(list);
-            e.printStackTrace();
-        }
-        return null;
+        return list.stream().sorted(Comparator.comparing(BookEntity::getPrice)
+            ).limit(50).collect(Collectors.toList());
     }
+
+    private List<BookEntity> getReversedSortList(List<BookEntity> list) {
+        return list.stream().sorted(Comparator.comparing(BookEntity::getPrice).reversed()
+        ).limit(50).collect(Collectors.toList());
+    }
+
 
     public void init() {
         OrderBookResponse orderBook = restClientFacade.getOrderBook();
         currentSequence = orderBook.getPayload().getSequence();
 
         askList = orderBook.getPayload().getAsks();
-
         bidList = orderBook.getPayload().getBids();
 
         asks.set(FXCollections.observableArrayList(getSortList(askList)));
-        bids.set(FXCollections.observableArrayList(getSortList(bidList)));
+        bids.set(FXCollections.observableArrayList(getReversedSortList(bidList)));
 
     }
 
@@ -73,8 +72,8 @@ public class OrderBookDataProvider {
             if (diffOrder.getSequence() != null && diffOrder.getSequence().compareTo(currentSequence) > 0) {
                 List<DiffOrderPayload> payload = diffOrder.getPayload();
                 if (payload != null) {
-                    payload.stream().forEach(e -> updateBook(e));
                     currentSequence = diffOrder.getSequence();
+                    payload.stream().forEach(e -> updateBook(e));
                 }
             }
         }
@@ -87,25 +86,28 @@ public class OrderBookDataProvider {
                 switch (e.getStatus()) {
                     case CANCELLED: {
                         if (e.getType().equals(OpTypeEnum.BUY)) {
+                            System.out.println("Cancelled ASK!");
                             askList.remove(new BookEntity(e.getId()));
                             asks.set(FXCollections.observableArrayList(getSortList(askList)));
                         } else {
+                            System.out.println("Cancelled BID!");
                             bidList.remove(new BookEntity(e.getId()));
-                            bids.set(FXCollections.observableArrayList(getSortList(bidList)));
+                            bids.set(FXCollections.observableArrayList(getReversedSortList(bidList)));
                         }
-                        System.out.println("Cancelled!");
+
                         break;
                     }
 
                     case OPEN: {
                         if (e.getType().equals(OpTypeEnum.BUY)) {
-
-                            askList.add(new BookEntity(e.getId(), "btc_mxn", e.getValue(), e.getAmount()));
+                            System.out.println("OPEN ASK!");
+                            askList.add(new BookEntity(e.getId(), "btc_mxn", e.getRate(), e.getAmount()));
                             asks.set(FXCollections.observableArrayList(getSortList(askList)));
 
                         } else {
-                            bidList.add(new BookEntity(e.getId(), "btc_mxn", e.getValue(), e.getAmount()));
-                            bids.set(FXCollections.observableArrayList(getSortList(bidList)));
+                            System.out.println("OPEN BID");
+                            bidList.add(new BookEntity(e.getId(), "btc_mxn", e.getRate(), e.getAmount()));
+                            bids.set(FXCollections.observableArrayList(getReversedSortList(bidList)));
                         }
                         System.out.println("Open!");
                         break;

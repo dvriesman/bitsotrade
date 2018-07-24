@@ -23,7 +23,7 @@ public class DiffOrderPayload {
     private OpTypeEnum type;
 
     @JsonProperty("r")
-    private BigDecimal rate;
+    private Double rate;
 
     @JsonProperty("a")
     private Double amount;
@@ -59,13 +59,6 @@ public class DiffOrderPayload {
         this.type = type;
     }
 
-    public BigDecimal getRate() {
-        return rate;
-    }
-
-    public void setRate(BigDecimal rate) {
-        this.rate = rate;
-    }
 
     public StatusEnum getStatus() {
         return status;
@@ -90,4 +83,14 @@ public class DiffOrderPayload {
     public void setValue(Double value) {
         this.value = value;
     }
+
+    public Double getRate() {
+        return rate;
+    }
+
+    public void setRate(Double rate) {
+        this.rate = rate;
+    }
+
+
 }

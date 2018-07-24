@@ -43,7 +43,8 @@ public class JsonUtil {
 
         @Override
         public OpTypeEnum deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-            return p.getText().equals("1") ? OpTypeEnum.SELL : OpTypeEnum.BUY;
+            System.out.println("Deserialize: " + p.getText());
+            return p.getText().equals("0") ? OpTypeEnum.BUY : OpTypeEnum.SELL;
         }
     }
 

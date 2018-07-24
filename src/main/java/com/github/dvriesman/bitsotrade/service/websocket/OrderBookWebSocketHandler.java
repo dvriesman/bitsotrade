@@ -31,6 +31,7 @@ public class OrderBookWebSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+        System.out.println(message.getPayload());
         if (message != null && !message.getPayload().contains("action")) {
             try {
                 DiffOrder diffOrder = new ObjectMapper().readerFor(DiffOrder.class).readValue(message.getPayload());
