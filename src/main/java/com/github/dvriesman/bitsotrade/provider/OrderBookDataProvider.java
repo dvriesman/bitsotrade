@@ -26,8 +26,8 @@ public class OrderBookDataProvider {
     @Autowired
     private RestClientFacade restClientFacade;
 
-    protected ListProperty<BookEntity> asks = new SimpleListProperty<>();
-    protected ListProperty<BookEntity> bids = new SimpleListProperty<>();
+    private ListProperty<BookEntity> asks = new SimpleListProperty<>();
+    private ListProperty<BookEntity> bids = new SimpleListProperty<>();
 
     private List<BookEntity> askList;
     private List<BookEntity> bidList;

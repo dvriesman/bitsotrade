@@ -11,6 +11,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.dvriesman.bitsotrade.controller.MainApplicationController">
    <children>
       <VBox alignment="CENTER" layoutX="13.0" layoutY="18.0" prefHeight="414.0" prefWidth="525.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -27,10 +28,14 @@
                         <TextField layoutX="41.0" layoutY="111.0" />
                      </children>
                   </Pane>
-                  <TableView prefHeight="221.0" prefWidth="494.0" HBox.hgrow="ALWAYS">
+                  <TableView fx:id="tradesTableView" prefHeight="221.0" prefWidth="494.0" HBox.hgrow="ALWAYS">
                     <columns>
-                      <TableColumn prefWidth="75.0" text="C1" />
-                      <TableColumn prefWidth="75.0" text="C2" />
+                      <TableColumn prefWidth="75.0" text="MakerSide">
+                       <cellValueFactory><PropertyValueFactory property="makerSide" /></cellValueFactory>
+                      </TableColumn>
+                       <TableColumn prefWidth="75.0" text="Amount">
+                          <cellValueFactory><PropertyValueFactory property="amount" /></cellValueFactory>
+                       </TableColumn>
                     </columns>
                   </TableView>
                </children>

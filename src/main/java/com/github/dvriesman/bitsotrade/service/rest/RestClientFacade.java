@@ -1,7 +1,9 @@
 package com.github.dvriesman.bitsotrade.service.rest;
 
 import com.github.dvriesman.bitsotrade.model.rest.OrderBookResponse;
+import com.github.dvriesman.bitsotrade.model.rest.TradesResponse;
 import com.github.dvriesman.bitsotrade.service.rest.api.OrderBookService;
+import com.github.dvriesman.bitsotrade.service.rest.api.TradeService;
 import com.github.dvriesman.bitsotrade.service.rest.util.RetrofitClientBuilder;
 import org.springframework.stereotype.Component;
 import retrofit2.Call;
@@ -15,9 +17,11 @@ public class RestClientFacade {
     private static final String FIXED_CURRENCY = "btc_mxn";
 
     private OrderBookService orderBookService;
+    private TradeService tradeService;
 
     public RestClientFacade() {
         orderBookService = RetrofitClientBuilder.createService(OrderBookService.class, BASE_URL);
+        tradeService = RetrofitClientBuilder.createService(TradeService.class, BASE_URL);
     }
 
     public OrderBookResponse getOrderBook() {
@@ -27,10 +31,19 @@ public class RestClientFacade {
             OrderBookResponse body = resp.body();
             return body;
         } catch(IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-        return null;
     }
 
+    public TradesResponse getTrades(Integer limit) {
+        Call<TradesResponse> call = tradeService.getTrades(FIXED_CURRENCY, limit);
+        try {
+            Response<TradesResponse> resp = call.execute();
+            TradesResponse body = resp.body();
+            return body;
+        } catch(IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }
