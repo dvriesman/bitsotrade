@@ -6,9 +6,10 @@ import com.github.dvriesman.bitsotrade.model.domain.DiffOrderPayload;
 import com.github.dvriesman.bitsotrade.model.rest.OrderBookResponse;
 import com.github.dvriesman.bitsotrade.model.types.OpTypeEnum;
 import com.github.dvriesman.bitsotrade.service.rest.RestClientFacade;
+
+
 import javafx.application.Platform;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,11 @@ public class OrderBookDataProvider {
     private List<BookEntity> askList;
     private List<BookEntity> bidList;
 
+    private StringProperty orderBookSizeLimitProperty = new SimpleStringProperty();
+
+    public StringProperty getOrderBookSizeLimitPropertyProperty() {
+        return orderBookSizeLimitProperty;
+    }
 
     public ListProperty<BookEntity> getAsks() {
         return asks;
@@ -42,13 +48,21 @@ public class OrderBookDataProvider {
     }
 
     private List<BookEntity> getSortList(List<BookEntity> list) {
+
+        Integer limit = orderBookSizeLimitProperty.get() != null &&
+                orderBookSizeLimitProperty.get().trim().length() > 0 ? new Integer(orderBookSizeLimitProperty.get()) : 5;
+
         return list.stream().sorted(Comparator.comparing(BookEntity::getPrice)
-            ).limit(50).collect(Collectors.toList());
+            ).limit(limit).collect(Collectors.toList());
     }
 
     private List<BookEntity> getReversedSortList(List<BookEntity> list) {
+
+        Integer limit = orderBookSizeLimitProperty.get() != null &&
+                orderBookSizeLimitProperty.get().trim().length() > 0 ? new Integer(orderBookSizeLimitProperty.get()) : 5;
+
         return list.stream().sorted(Comparator.comparing(BookEntity::getPrice).reversed()
-        ).limit(50).collect(Collectors.toList());
+        ).limit(limit).collect(Collectors.toList());
     }
 
 

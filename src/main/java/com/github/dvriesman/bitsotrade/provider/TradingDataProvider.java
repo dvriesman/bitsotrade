@@ -6,6 +6,8 @@ import com.github.dvriesman.bitsotrade.model.rest.TradesResponse;
 import com.github.dvriesman.bitsotrade.service.rest.RestClientFacade;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +20,11 @@ public class TradingDataProvider {
     @Autowired
     private RestClientFacade restClientFacade;
 
-    private Integer limit;
+    private StringProperty tradeSizeLimitProperty = new SimpleStringProperty();
+
+    public StringProperty getTradeSizeLimitPropertyProperty() {
+        return tradeSizeLimitProperty;
+    }
 
     private ListProperty<TradesPayload> trades = new SimpleListProperty<>();
 
@@ -26,21 +32,15 @@ public class TradingDataProvider {
         return trades;
     }
 
-    public void setLimit(Integer limit) {
-        this.limit = limit;
-    }
-
-    public void init(Integer limit) {
-        setLimit(limit);
+    private Integer getLimit() {
+        return tradeSizeLimitProperty.get() != null && tradeSizeLimitProperty.get().trim().length() > 0 ?
+                new Integer(tradeSizeLimitProperty.get()) : 10;
     }
 
     @Scheduled(fixedRate = 10000)
     public void updateTrade() {
-        if (limit != null) {
-            TradesResponse tradeResponse = restClientFacade.getTrades(limit);
-            trades.set(FXCollections.observableArrayList(tradeResponse.getPayload()));
-        }
+        TradesResponse tradeResponse = restClientFacade.getTrades(getLimit());
+        trades.set(FXCollections.observableArrayList(tradeResponse.getPayload()));
     }
-
 
 }
