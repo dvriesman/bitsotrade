@@ -45,19 +45,10 @@ public class MainApplicationController implements Initializable {
     private TableView<TradesPayload> tradesTableView;
 
     @FXML
-    private Button btnTest;
-
-    @FXML
     private TextField orderBookSizeLimit;
 
     @FXML
     private TextField tradeSizeLimit;
-
-    @FXML
-    protected void onClick(ActionEvent event) {
-
-
-    }
 
     public void initialize(URL location, ResourceBundle resourceBundle) {
 

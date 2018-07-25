@@ -37,7 +37,7 @@ public class TradingDataProvider {
                 new Integer(tradeSizeLimitProperty.get()) : 10;
     }
 
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(fixedRate = 1000)
     public void updateTrade() {
         TradesResponse tradeResponse = restClientFacade.getTrades(getLimit());
         trades.set(FXCollections.observableArrayList(tradeResponse.getPayload()));
