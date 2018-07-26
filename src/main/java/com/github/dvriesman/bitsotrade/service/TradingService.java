@@ -1,5 +1,6 @@
 package com.github.dvriesman.bitsotrade.service;
 
+import com.github.dvriesman.bitsotrade.components.TradingStrategy;
 import com.github.dvriesman.bitsotrade.model.domain.TradesPayload;
 import com.github.dvriesman.bitsotrade.model.domain.TradesResponse;
 import com.github.dvriesman.bitsotrade.cloud.rest.RestClientFacade;
@@ -13,11 +14,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TradingService {
 
     @Autowired
     private RestClientFacade restClientFacade;
+
+    @Autowired
+    private TradingStrategy tradingStrategy;
 
     private static final Integer DEFAULT_LIMIT = 20;
 
@@ -42,8 +48,9 @@ public class TradingService {
     @Scheduled(fixedRate = 1000)
     public void updateTrade() {
         TradesResponse tradeResponse = restClientFacade.getTrades(getLimit());
+        List<TradesPayload> tradesPayloads = tradingStrategy.runStrategy(tradeResponse.getPayload(), 3, 3);
         Platform.runLater(() -> {
-            trades.set(FXCollections.observableArrayList(tradeResponse.getPayload()));
+            trades.set(FXCollections.observableArrayList(tradesPayloads));
         });
     }
 

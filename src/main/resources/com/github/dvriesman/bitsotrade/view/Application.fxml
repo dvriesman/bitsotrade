@@ -33,8 +33,8 @@
                   </Pane>
                   <TableView fx:id="tradesTableView" prefHeight="221.0" prefWidth="678.0" HBox.hgrow="ALWAYS">
                     <columns>
-                       <TableColumn prefWidth="75.0" text="Simulated">
-                          <cellValueFactory><PropertyValueFactory property="simulated" /></cellValueFactory>
+                       <TableColumn prefWidth="75.0" text="Virtual">
+                          <cellValueFactory><PropertyValueFactory property="virtual" /></cellValueFactory>
                        </TableColumn>
                        <TableColumn prefWidth="95.0" text="Operation">
                           <cellValueFactory><PropertyValueFactory property="makerSide" /></cellValueFactory>

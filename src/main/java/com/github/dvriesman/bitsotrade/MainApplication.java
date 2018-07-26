@@ -1,6 +1,7 @@
 package com.github.dvriesman.bitsotrade;
 
 import com.github.dvriesman.bitsotrade.cloud.rest.RestClientFacade;
+import com.github.dvriesman.bitsotrade.components.TradingStrategy;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -26,6 +27,9 @@ public class MainApplication extends Application {
     public RestClientFacade restClientFacade() {
         return new RestClientFacade();
     }
+
+    @Bean
+    public TradingStrategy tradingStrategy() {return new TradingStrategy();}
 
     @Override
     public void init() throws Exception {

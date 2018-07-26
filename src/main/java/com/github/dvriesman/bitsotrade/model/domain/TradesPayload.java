@@ -8,6 +8,8 @@ public class TradesPayload {
 
     private String book;
 
+    private transient boolean virtual;
+
     @JsonProperty("created_at")
     private Date createdAt;
 
@@ -66,4 +68,14 @@ public class TradesPayload {
     public void setTid(String tid) {
         this.tid = tid;
     }
+
+    public boolean isVirtual() {
+        return virtual;
+    }
+
+    public void setVirtual(boolean virtual) {
+        this.virtual = virtual;
+    }
+
+
 }
