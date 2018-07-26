@@ -1,4 +1,4 @@
-package com.github.dvriesman.bitsotrade.service.websocket;
+package com.github.dvriesman.bitsotrade.cloud.websocket;
 
 
 import org.springframework.context.annotation.Bean;

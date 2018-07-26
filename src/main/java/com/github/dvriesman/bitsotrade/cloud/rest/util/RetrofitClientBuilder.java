@@ -1,4 +1,4 @@
-package com.github.dvriesman.bitsotrade.service.rest.util;
+package com.github.dvriesman.bitsotrade.cloud.rest.util;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;

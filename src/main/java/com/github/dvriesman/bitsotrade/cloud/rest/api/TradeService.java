@@ -1,6 +1,6 @@
-package com.github.dvriesman.bitsotrade.service.rest.api;
+package com.github.dvriesman.bitsotrade.cloud.rest.api;
 
-import com.github.dvriesman.bitsotrade.model.rest.TradesResponse;
+import com.github.dvriesman.bitsotrade.model.domain.TradesResponse;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;

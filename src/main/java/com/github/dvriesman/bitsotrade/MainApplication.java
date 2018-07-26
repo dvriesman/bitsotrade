@@ -1,6 +1,6 @@
 package com.github.dvriesman.bitsotrade;
 
-import com.github.dvriesman.bitsotrade.service.rest.RestClientFacade;
+import com.github.dvriesman.bitsotrade.cloud.rest.RestClientFacade;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

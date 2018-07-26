@@ -1,11 +1,10 @@
-package com.github.dvriesman.bitsotrade.service.rest;
+package com.github.dvriesman.bitsotrade.cloud.rest;
 
-import com.github.dvriesman.bitsotrade.model.rest.OrderBookResponse;
-import com.github.dvriesman.bitsotrade.model.rest.TradesResponse;
-import com.github.dvriesman.bitsotrade.service.rest.api.OrderBookService;
-import com.github.dvriesman.bitsotrade.service.rest.api.TradeService;
-import com.github.dvriesman.bitsotrade.service.rest.util.RetrofitClientBuilder;
-import org.springframework.stereotype.Component;
+import com.github.dvriesman.bitsotrade.model.domain.OrderBookResponse;
+import com.github.dvriesman.bitsotrade.model.domain.TradesResponse;
+import com.github.dvriesman.bitsotrade.cloud.rest.api.OrderBookService;
+import com.github.dvriesman.bitsotrade.cloud.rest.api.TradeService;
+import com.github.dvriesman.bitsotrade.cloud.rest.util.RetrofitClientBuilder;
 import retrofit2.Call;
 import retrofit2.Response;
 

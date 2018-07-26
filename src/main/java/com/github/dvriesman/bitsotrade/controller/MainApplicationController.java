@@ -1,18 +1,11 @@
 package com.github.dvriesman.bitsotrade.controller;
 
 import com.github.dvriesman.bitsotrade.model.domain.BookEntity;
-import com.github.dvriesman.bitsotrade.model.rest.TradesPayload;
-import com.github.dvriesman.bitsotrade.provider.OrderBookDataProvider;
-import com.github.dvriesman.bitsotrade.provider.TradingDataProvider;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.SimpleListProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
+import com.github.dvriesman.bitsotrade.model.domain.TradesPayload;
+import com.github.dvriesman.bitsotrade.service.OrderBookService;
+import com.github.dvriesman.bitsotrade.service.TradingService;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -28,12 +21,11 @@ public class MainApplicationController implements Initializable {
     private static final String BOOK_SIZE_DEFAULT_LIMIT = "10";
     private static final String TRADE_SIZE_DEFAULT_LIMIT = "15";
 
+    @Autowired
+    private OrderBookService orderBookService;
 
     @Autowired
-    private OrderBookDataProvider orderBookDataProvider;
-
-    @Autowired
-    private TradingDataProvider tradingDataProvider;
+    private TradingService tradingService;
 
     @FXML
     private ListView<BookEntity> asksListView;
@@ -60,7 +52,7 @@ public class MainApplicationController implements Initializable {
         orderBookSizeLimit.setText(BOOK_SIZE_DEFAULT_LIMIT);
         tradeSizeLimit.setText(TRADE_SIZE_DEFAULT_LIMIT);
 
-        orderBookDataProvider.init();
+        orderBookService.init();
 
     }
 
@@ -73,11 +65,11 @@ public class MainApplicationController implements Initializable {
     }
 
     private void bindEveryOne() {
-        orderBookSizeLimit.textProperty().bindBidirectional(orderBookDataProvider.getOrderBookSizeLimitPropertyProperty());
-        tradeSizeLimit.textProperty().bindBidirectional(tradingDataProvider.getTradeSizeLimitPropertyProperty());
-        asksListView.itemsProperty().bind(orderBookDataProvider.getAsks());
-        bidsListView.itemsProperty().bind(orderBookDataProvider.getBids());
-        tradesTableView.itemsProperty().bind(tradingDataProvider.getTrades());
+        orderBookSizeLimit.textProperty().bindBidirectional(orderBookService.getOrderBookSizeLimitPropertyProperty());
+        tradeSizeLimit.textProperty().bindBidirectional(tradingService.getTradeSizeLimitPropertyProperty());
+        asksListView.itemsProperty().bind(orderBookService.getAsks());
+        bidsListView.itemsProperty().bind(orderBookService.getBids());
+        tradesTableView.itemsProperty().bind(tradingService.getTrades());
     }
 
 

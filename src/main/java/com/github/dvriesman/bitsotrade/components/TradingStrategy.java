@@ -1,9 +1,9 @@
-package com.github.dvriesman.bitsotrade.provider;
+package com.github.dvriesman.bitsotrade.components;
 
-import com.github.dvriesman.bitsotrade.model.rest.TradesPayload;
-import org.springframework.stereotype.Service;
+import com.github.dvriesman.bitsotrade.model.domain.TradesPayload;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 public class TradingStrategy {
 
     private Integer uptickets;

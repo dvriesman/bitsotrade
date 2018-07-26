@@ -1,4 +1,6 @@
-package com.github.dvriesman.bitsotrade.model.rest;
+package com.github.dvriesman.bitsotrade.model.domain;
+
+import com.github.dvriesman.bitsotrade.model.domain.TradesPayload;
 
 import java.util.List;
 

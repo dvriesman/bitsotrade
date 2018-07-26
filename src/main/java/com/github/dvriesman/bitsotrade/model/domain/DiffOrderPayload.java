@@ -2,11 +2,10 @@ package com.github.dvriesman.bitsotrade.model.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.github.dvriesman.bitsotrade.components.JsonUtil;
+import com.github.dvriesman.bitsotrade.util.JsonUtil;
 import com.github.dvriesman.bitsotrade.model.types.OpTypeEnum;
 import com.github.dvriesman.bitsotrade.model.types.StatusEnum;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class DiffOrderPayload {

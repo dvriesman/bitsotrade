@@ -18,7 +18,7 @@
          <children>
             <HBox prefHeight="159.0" prefWidth="542.0" VBox.vgrow="ALWAYS">
                <children>
-                  <Pane minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="271.0" HBox.hgrow="ALWAYS">
+                  <Pane minHeight="-Infinity" minWidth="-Infinity" prefHeight="221.0" prefWidth="178.0" HBox.hgrow="ALWAYS">
                      <padding>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
@@ -31,24 +31,24 @@
                         <Label layoutX="14.0" layoutY="111.0" text="Consecutive Downtickets" />
                      </children>
                   </Pane>
-                  <TableView fx:id="tradesTableView" prefHeight="221.0" prefWidth="494.0" HBox.hgrow="ALWAYS">
+                  <TableView fx:id="tradesTableView" prefHeight="221.0" prefWidth="678.0" HBox.hgrow="ALWAYS">
                     <columns>
                        <TableColumn prefWidth="75.0" text="Simulated">
                           <cellValueFactory><PropertyValueFactory property="simulated" /></cellValueFactory>
                        </TableColumn>
-                       <TableColumn prefWidth="61.0" text="Operation">
+                       <TableColumn prefWidth="95.0" text="Operation">
                           <cellValueFactory><PropertyValueFactory property="makerSide" /></cellValueFactory>
                        </TableColumn>
-                       <TableColumn prefWidth="120.0" text="Amount">
+                       <TableColumn prefWidth="125.0" text="Amount">
                           <cellValueFactory><PropertyValueFactory property="amount" /></cellValueFactory>
                        </TableColumn>
-                       <TableColumn prefWidth="59.0" text="Price">
+                       <TableColumn prefWidth="114.0" text="Price">
                           <cellValueFactory><PropertyValueFactory property="price" /></cellValueFactory>
                        </TableColumn>
-                      <TableColumn prefWidth="102.0" text="Created at">
+                      <TableColumn prefWidth="138.0" text="Created at">
                        <cellValueFactory><PropertyValueFactory property="createdAt" /></cellValueFactory>
                       </TableColumn>
-                       <TableColumn prefWidth="111.0" text="Trade ID">
+                       <TableColumn prefWidth="107.0" text="Trade ID">
                           <cellValueFactory><PropertyValueFactory property="tid" /></cellValueFactory>
                        </TableColumn>
                     </columns>

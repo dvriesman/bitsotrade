@@ -1,4 +1,4 @@
-package com.github.dvriesman.bitsotrade.model.rest;
+package com.github.dvriesman.bitsotrade.model.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

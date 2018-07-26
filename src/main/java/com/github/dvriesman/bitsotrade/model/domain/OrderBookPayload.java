@@ -1,7 +1,6 @@
-package com.github.dvriesman.bitsotrade.model.rest;
+package com.github.dvriesman.bitsotrade.model.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.dvriesman.bitsotrade.model.domain.BookEntity;
 
 import java.math.BigInteger;
 import java.util.Date;
