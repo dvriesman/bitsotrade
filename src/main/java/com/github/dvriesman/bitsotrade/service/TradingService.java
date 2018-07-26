@@ -1,5 +1,6 @@
 package com.github.dvriesman.bitsotrade.service;
 
+import com.github.dvriesman.bitsotrade.Constants;
 import com.github.dvriesman.bitsotrade.components.TradingStrategy;
 import com.github.dvriesman.bitsotrade.model.domain.TradesPayload;
 import com.github.dvriesman.bitsotrade.model.domain.TradesResponse;
@@ -25,8 +26,6 @@ public class TradingService {
     @Autowired
     private TradingStrategy tradingStrategy;
 
-    private static final Integer DEFAULT_LIMIT = 20;
-
     private StringProperty tradeSizeLimitProperty = new SimpleStringProperty();
 
     public StringProperty getTradeSizeLimitPropertyProperty() {
@@ -42,7 +41,7 @@ public class TradingService {
     private Integer getLimit() {
         return tradeSizeLimitProperty.get() != null &&
                 tradeSizeLimitProperty.get().trim().length() > 0 ?
-                new Integer(tradeSizeLimitProperty.get()) : DEFAULT_LIMIT;
+                new Integer(tradeSizeLimitProperty.get()) : Constants.DEFAULT_LIMIT;
     }
 
     @Scheduled(fixedRate = 1000)

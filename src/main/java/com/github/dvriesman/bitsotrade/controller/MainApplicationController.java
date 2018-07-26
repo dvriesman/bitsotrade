@@ -1,5 +1,6 @@
 package com.github.dvriesman.bitsotrade.controller;
 
+import com.github.dvriesman.bitsotrade.Constants;
 import com.github.dvriesman.bitsotrade.model.domain.BookEntity;
 import com.github.dvriesman.bitsotrade.model.domain.TradesPayload;
 import com.github.dvriesman.bitsotrade.service.OrderBookService;
@@ -18,8 +19,6 @@ import java.util.ResourceBundle;
 @Component
 public class MainApplicationController implements Initializable {
 
-    private static final String BOOK_SIZE_DEFAULT_LIMIT = "10";
-    private static final String TRADE_SIZE_DEFAULT_LIMIT = "15";
 
     @Autowired
     private OrderBookService orderBookService;
@@ -49,8 +48,8 @@ public class MainApplicationController implements Initializable {
 
         bindEveryOne();
 
-        orderBookSizeLimit.setText(BOOK_SIZE_DEFAULT_LIMIT);
-        tradeSizeLimit.setText(TRADE_SIZE_DEFAULT_LIMIT);
+        orderBookSizeLimit.setText(Constants.BOOK_SIZE_DEFAULT_LIMIT);
+        tradeSizeLimit.setText(Constants.TRADE_SIZE_DEFAULT_LIMIT);
 
         orderBookService.init();
 

@@ -1,5 +1,6 @@
 package com.github.dvriesman.bitsotrade.service;
 
+import com.github.dvriesman.bitsotrade.Constants;
 import com.github.dvriesman.bitsotrade.cloud.rest.RestClientFacade;
 import com.github.dvriesman.bitsotrade.model.domain.BookEntity;
 import com.github.dvriesman.bitsotrade.model.domain.DiffOrder;
@@ -24,8 +25,8 @@ import java.util.stream.Collectors;
 @Service
 public class OrderBookService {
 
-    private static final String DEFAULT_BOOK = "btc_mxn";
-    private static final Integer DEFAULT_LIMIT = 20;
+
+
     private BigInteger currentSequence;
 
     @Autowired
@@ -54,7 +55,7 @@ public class OrderBookService {
     private Integer getLimit(List<BookEntity> list) {
         Integer limit = orderBookSizeLimitProperty.get() != null &&
                 orderBookSizeLimitProperty.get().trim().length() > 0 ?
-                new Integer(orderBookSizeLimitProperty.get()) : DEFAULT_LIMIT ;
+                new Integer(orderBookSizeLimitProperty.get()) : Constants.DEFAULT_LIMIT ;
 
         return limit;
     }
@@ -114,7 +115,7 @@ public class OrderBookService {
                     break;
                 }
                 case OPEN: {
-                    list.add(new BookEntity(e.getId(), DEFAULT_BOOK, e.getRate(), e.getAmount()));
+                    list.add(new BookEntity(e.getId(), Constants.BOOK, e.getRate(), e.getAmount()));
                     listProperty.set(FXCollections.observableArrayList(sortList.apply(list)));
                     break;
                 }

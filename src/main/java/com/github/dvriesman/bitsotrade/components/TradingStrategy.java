@@ -1,5 +1,6 @@
 package com.github.dvriesman.bitsotrade.components;
 
+import com.github.dvriesman.bitsotrade.Constants;
 import com.github.dvriesman.bitsotrade.model.domain.TradesPayload;
 import com.github.dvriesman.bitsotrade.model.types.OpTypeEnum;
 
@@ -13,61 +14,50 @@ public class TradingStrategy {
 
     private List<TradesPayload> virtualOrders = new ArrayList<>();
 
-    public List<TradesPayload> runStrategy(List<TradesPayload> trades, Integer uptickets, Integer downtickets) {
+    private int countTickets(List<TradesPayload> toEvaluate, Integer uptickets, Integer downtickets) {
+        int tickets = 0;
+        TradesPayload latestTrade = null;
+        int count = 0;
+        for (TradesPayload trade : toEvaluate) {
+            count++;
+            if (latestTrade != null) {
+                if (trade.getPrice().compareTo(latestTrade.getPrice()) > 0) {
+                    tickets++;
+                } else {
+                    if (trade.getPrice().compareTo(latestTrade.getPrice()) < 0) {
+                        tickets--;
+                    }
+                }
+                if (tickets >= uptickets || tickets <= (-1 * downtickets)) {
+                    break;
+                }
+            }
+            latestTrade = trade;
+            if (count > uptickets && count > downtickets) {
+                break;
+            }
+        }
+        return tickets;
+    }
 
-        System.out.println("Virtual orders: " + virtualOrders.size());
+
+
+    public List<TradesPayload> runStrategy(List<TradesPayload> trades, int uptickets, int downtickets) {
 
         trades.addAll(virtualOrders);
 
         List<TradesPayload>  toEvaluate = trades.stream()
-                    .sorted(Comparator.comparing(TradesPayload::getCreatedAt).reversed()).collect(Collectors.toList());
+                    .sorted(Comparator.comparing(TradesPayload::getCreatedAt)
+                            .reversed()).collect(Collectors.toList());
 
-        int tickets = 0;
+        if (toEvaluate.size() > 0) {
 
-        TradesPayload latestTrade = null;
-        TradesPayload mostRecentlyTrade = null;
+            TradesPayload mostRecentlyTrade = toEvaluate.get(0);
 
-        int count = 0;
-        //To remember - list is inverted (latest by date are coming first).
-        System.out.println("Tickets starting  List size: " + toEvaluate.size());
-        if (toEvaluate.size() >0) {
-            for (TradesPayload trade : toEvaluate) {
-                count++;
-                System.out.println("Tickets count: " + count);
-                if (latestTrade != null) {
-                    if (trade.getPrice().compareTo(latestTrade.getPrice()) > 0) {
-                        tickets++;
-                    } else {
-                        if (trade.getPrice().compareTo(latestTrade.getPrice()) < 0) {
-                            tickets--;
-                        }
-                    }
-                    if (tickets >= uptickets || tickets <= (-1 * downtickets)) {
-                        System.out.println("Breaking: " + tickets + "Downtickets: " + downtickets + "UpTickets: " + uptickets);
-                        break;
-                    }
-                } else {
-                    mostRecentlyTrade = trade;
-                }
-                latestTrade = trade;
-                if (count > uptickets && count > downtickets) {
-                    System.out.println("Breaking X - count: " + count + " Ticktes: " + tickets + " Downtickets: " + downtickets +  "UpTickets: " + uptickets);
-                    break;
-                }
-            }
-            TradesPayload newTrade = null;
-
-            System.out.println("Total tickets: " + tickets);
-            if (tickets >= uptickets) {
-                newTrade = createOrder(OpTypeEnum.SELL, mostRecentlyTrade.getPrice());
-            } else {
-                if (tickets <= (-1 * downtickets)) {
-                    newTrade = createOrder(OpTypeEnum.BUY, mostRecentlyTrade.getPrice());
-                }
-            }
+            int tickets = countTickets(toEvaluate, uptickets, downtickets);
+            TradesPayload newTrade = createExecutedTrade(tickets, uptickets, downtickets,  mostRecentlyTrade.getPrice());
 
             if (newTrade != null) {
-                System.out.println("Virtual");
                 virtualOrders.add(newTrade);
                 trades.add(newTrade);
             }
@@ -78,10 +68,23 @@ public class TradingStrategy {
 
     }
 
+    private TradesPayload createExecutedTrade(int tickets, int uptickets, int downtickets, double price) {
+        TradesPayload newTrade = null;
+        if (tickets >= uptickets) {
+            newTrade = createOrder(OpTypeEnum.BUY, price);
+        } else {
+            if (tickets <= (-1 * downtickets)) {
+                newTrade = createOrder(OpTypeEnum.SELL, price);
+            }
+        }
+        return newTrade;
+    }
+
+
     private TradesPayload createOrder(OpTypeEnum type, Double price) {
         TradesPayload  result = new TradesPayload();
         result.setAmount(1.0);
-        result.setBook("btc_mxn");
+        result.setBook(Constants.BOOK);
         result.setCreatedAt(new Date());
         result.setMarkerSide(type.equals(OpTypeEnum.BUY) ? "buy" : "sell");
         result.setPrice(price);
