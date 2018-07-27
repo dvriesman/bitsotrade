@@ -57,6 +57,16 @@ public class TradingStrategyTest {
         assertTrue(tradesPayloads.get(0).getMakerSide().equals("buy"));
     }
 
+    @Test
+    public void runStrategyLongDownticketWithZeroTicketTest() {
+        TradingStrategy ts = new TradingStrategy();
+        List<TradesPayload> trades = newTestList(70,60,60,50,45,35,30,30,20,20,10);
+        List<TradesPayload> tradesPayloads = ts.runStrategy(trades, 4, 6);
+        assertTrue(tradesPayloads.get(0).getAmount().equals(1.0));
+        assertTrue(tradesPayloads.get(0).getMakerSide().equals("buy"));
+    }
+
+
     private List<TradesPayload> newTestList(double... values) {
         List<TradesPayload> result = new LinkedList<>();
         TradesPayload trade = null;
