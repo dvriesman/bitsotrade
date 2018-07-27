@@ -77,5 +77,13 @@ public class TradesPayload {
         this.virtual = virtual;
     }
 
+    public String getPriceString() {
+        return String.format("%1$,.2f", price);
+    }
+
+    public String getAmountString() {
+        return String.format("%1$,.10f", amount);
+    }
+
 
 }

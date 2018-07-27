@@ -7,5 +7,7 @@ public interface Constants {
     public static final Integer DEFAULT_LIMIT = 20;
     public static final String BOOK_SIZE_DEFAULT_LIMIT = "10";
     public static final String TRADE_SIZE_DEFAULT_LIMIT = "15";
+    public static final Integer DEFAULT_UPTICKET = 3;
+    public static final Integer DEFAULT_DOWNTICKET = 3;
 
 }

@@ -19,7 +19,6 @@ import java.util.ResourceBundle;
 @Component
 public class MainApplicationController implements Initializable {
 
-
     @Autowired
     private OrderBookService orderBookService;
 
@@ -41,15 +40,26 @@ public class MainApplicationController implements Initializable {
     @FXML
     private TextField tradeSizeLimit;
 
+    @FXML
+    private TextField downTicketCount;
+
+    @FXML
+    private TextField upticketCount;
+
+
     public void initialize(URL location, ResourceBundle resourceBundle) {
 
         handleIntegerField(tradeSizeLimit);
         handleIntegerField(orderBookSizeLimit);
+        handleIntegerField(upticketCount);
+        handleIntegerField(downTicketCount);
 
         bindEveryOne();
 
         orderBookSizeLimit.setText(Constants.BOOK_SIZE_DEFAULT_LIMIT);
         tradeSizeLimit.setText(Constants.TRADE_SIZE_DEFAULT_LIMIT);
+        upticketCount.setText(String.valueOf(Constants.DEFAULT_UPTICKET));
+        downTicketCount.setText(String.valueOf(Constants.DEFAULT_DOWNTICKET));
 
         orderBookService.init();
 
@@ -66,6 +76,8 @@ public class MainApplicationController implements Initializable {
     private void bindEveryOne() {
         orderBookSizeLimit.textProperty().bindBidirectional(orderBookService.getOrderBookSizeLimitPropertyProperty());
         tradeSizeLimit.textProperty().bindBidirectional(tradingService.getTradeSizeLimitPropertyProperty());
+        upticketCount.textProperty().bindBidirectional(tradingService.getUpticketLimitProperty());
+        downTicketCount.textProperty().bindBidirectional(tradingService.getDownticketLimitProperty());
         asksListView.itemsProperty().bind(orderBookService.getAsks());
         bidsListView.itemsProperty().bind(orderBookService.getBids());
         tradesTableView.itemsProperty().bind(tradingService.getTrades());
