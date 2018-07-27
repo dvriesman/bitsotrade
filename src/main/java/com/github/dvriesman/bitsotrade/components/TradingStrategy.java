@@ -21,19 +21,23 @@ public class TradingStrategy {
         for (TradesPayload trade : toEvaluate) {
             count++;
             if (latestTrade != null) {
-                if (trade.getPrice().compareTo(latestTrade.getPrice()) > 0) {
-                    tickets++;
+                if  (trade.getPrice().compareTo(latestTrade.getPrice()) == 0) {
+                    count--;
                 } else {
-                    if (trade.getPrice().compareTo(latestTrade.getPrice()) < 0) {
-                        tickets--;
+                    if (trade.getPrice().compareTo(latestTrade.getPrice()) > 0) {
+                        tickets++;
+                    } else {
+                        if (trade.getPrice().compareTo(latestTrade.getPrice()) < 0) {
+                            tickets--;
+                        }
                     }
                 }
-                if (tickets >= uptickets || tickets <= (-1 * downtickets)) {
+                if (tickets >= (downtickets)|| tickets <= (-1 * uptickets )) {
                     break;
                 }
             }
             latestTrade = trade;
-            if (count > uptickets && count > downtickets) {
+            if (count > downtickets && count > uptickets) {
                 break;
             }
         }
@@ -70,11 +74,11 @@ public class TradingStrategy {
 
     private TradesPayload createExecutedTrade(int tickets, int uptickets, int downtickets, double price) {
         TradesPayload newTrade = null;
-        if (tickets >= uptickets) {
-            newTrade = createOrder(OpTypeEnum.BUY, price);
+        if (tickets <= (-1 * uptickets)) {
+            newTrade = createOrder(OpTypeEnum.SELL, price);
         } else {
-            if (tickets <= (-1 * downtickets)) {
-                newTrade = createOrder(OpTypeEnum.SELL, price);
+            if (tickets >= downtickets) {
+                newTrade = createOrder(OpTypeEnum.BUY, price);
             }
         }
         return newTrade;
