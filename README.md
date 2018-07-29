@@ -3,7 +3,7 @@
 BITSOTRADE is a experiment of using JavaFX with Spring Boot to create an application that simulate a contrarian trading strategy using as backend the services
 provides by Bitso cryptocurrency exchange. 
 
-# Frameworks/Libraries
+## Frameworks/Libraries
 - JavaFX for UI 
 - Spring Boot for Websocket and dependecy injection
 - Retrofit for simple REST client
