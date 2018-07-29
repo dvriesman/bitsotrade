@@ -22,10 +22,11 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/***
+ * Service responsible handle OrderBook
+ */
 @Service
 public class OrderBookService {
-
-
 
     private BigInteger currentSequence;
 
@@ -67,19 +68,22 @@ public class OrderBookService {
             x.stream().sorted(Comparator.comparing(BookEntity::getPrice).reversed())
                     .limit(getLimit(x)).collect(Collectors.toList());
 
+    /***
+     * Init order book using rest call
+     */
     public void init() {
         OrderBookResponse orderBook = restClientFacade.getOrderBook();
         currentSequence = orderBook.getPayload().getSequence();
-
         askList = orderBook.getPayload().getAsks();
         bidList = orderBook.getPayload().getBids();
-
         asks.set(FXCollections.observableArrayList(defaultSortList.apply(askList)));
         bids.set(FXCollections.observableArrayList(reversedSortList.apply(bidList)));
-
     }
 
-
+    /***
+     * Update order book
+     * @param diffOrder DiffOrder datastructure
+     */
     public void updateOrderBook(DiffOrder diffOrder) {
         if (currentSequence != null && diffOrder != null) {
             if (diffOrder.getSequence() != null && diffOrder.getSequence().compareTo(currentSequence) > 0) {
@@ -128,7 +132,7 @@ public class OrderBookService {
                     break;
                 }
                 default: {
-                    System.err.println("TODO - LOG4J");
+                    //TODO slf4j
                     break;
                 }
             }

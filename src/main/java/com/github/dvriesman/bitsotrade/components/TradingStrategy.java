@@ -10,11 +10,24 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/***
+ * Component responsible to simulate a contrarian trading strategy
+ */
 public class TradingStrategy {
 
     private List<TradesPayload> virtualOrders = new ArrayList<>();
 
+    /***
+     * Count number of tickets (considering a inverted list)
+     * @param toEvaluate Inverted by datetime sort list
+     * @param uptickets Number that triggers a SELL operation
+     * @param downtickets Number that triggers a BUY operation
+     * @return int Number of tickets (positive or negative)
+     */
     private int countTickets(List<TradesPayload> toEvaluate, Integer uptickets, Integer downtickets) {
+        if (toEvaluate.get(0).isVirtual()) {
+            return 0;
+        }
         int tickets = 0;
         TradesPayload latestTrade = null;
         int count = 0;
@@ -45,7 +58,13 @@ public class TradingStrategy {
     }
 
 
-
+    /***
+     * Run the contrarian trading strategy simulatino algorithm
+     * @param trades latest list of trades inverted sorted by date (first more recently datetime)
+     * @param uptickets Number that triggers a SELL operation
+     * @param downtickets Number that triggers a BUY operation
+     * @return List<TradesPayload> the final list of trades to be showed in simulation screen
+     */
     public List<TradesPayload> runStrategy(List<TradesPayload> trades, int uptickets, int downtickets) {
 
         trades.addAll(virtualOrders);
@@ -55,23 +74,26 @@ public class TradingStrategy {
                             .reversed()).collect(Collectors.toList());
 
         if (toEvaluate.size() > 0) {
-
             TradesPayload mostRecentlyTrade = toEvaluate.get(0);
-
             int tickets = countTickets(toEvaluate, uptickets, downtickets);
             TradesPayload newTrade = createExecutedTrade(tickets, uptickets, downtickets,  mostRecentlyTrade.getPrice());
-
             if (newTrade != null) {
                 virtualOrders.add(newTrade);
                 trades.add(newTrade);
             }
         }
-
         return trades.stream().sorted(Comparator.comparing(TradesPayload::getCreatedAt).
                 reversed()).collect(Collectors.toList());
-
     }
 
+    /***
+     * Create an virtual simulated executed trade.
+     * @param tickets Current number of tickets in list
+     * @param uptickets Number that triggers a SELL operation
+     * @param downtickets Number that triggers a BUY operation
+     * @param price Price of latest order
+     * @return TradesPayload created virtual simulated trade
+     */
     private TradesPayload createExecutedTrade(int tickets, int uptickets, int downtickets, double price) {
         TradesPayload newTrade = null;
         if (tickets <= (-1 * uptickets)) {

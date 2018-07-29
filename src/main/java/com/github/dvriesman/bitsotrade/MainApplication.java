@@ -15,6 +15,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 
+/***
+ * Main application, a mix of JavaFX with Spring boot
+ */
 @SpringBootApplication
 @Configuration
 @EnableScheduling

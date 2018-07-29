@@ -1,19 +1,21 @@
 package com.github.dvriesman.bitsotrade.cloud.websocket;
 
 
+import com.github.dvriesman.bitsotrade.Constants;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.client.WebSocketConnectionManager;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 
+/***
+ * Websocket setup
+ */
 @Configuration
 public class WebSocketConfiguration {
 
-    private static final String WS_URI = "wss://ws.bitso.com";
-
     @Bean
     public WebSocketConnectionManager connectionManager() {
-        WebSocketConnectionManager manager = new WebSocketConnectionManager(client(), handler(), WS_URI);
+        WebSocketConnectionManager manager = new WebSocketConnectionManager(client(), handler(), Constants.WS_URI);
         manager.setAutoStartup(true);
         return manager;
     }

@@ -5,6 +5,9 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
+/***
+ * Abstraction of order_book call
+ */
 public interface OrderBookService {
 
     @GET("order_book")

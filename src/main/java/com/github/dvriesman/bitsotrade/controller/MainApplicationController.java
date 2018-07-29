@@ -16,6 +16,9 @@ import org.springframework.stereotype.Component;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/***
+ * Main application JavaFX Controller
+ */
 @Component
 public class MainApplicationController implements Initializable {
 
@@ -44,25 +47,24 @@ public class MainApplicationController implements Initializable {
     private TextField downTicketCount;
 
     @FXML
-    private TextField upticketCount;
+    private TextField upTicketCount;
 
-
+    /***
+     * Do initial setup of screen and binds with controllers
+     * @param location
+     * @param resourceBundle
+     */
     public void initialize(URL location, ResourceBundle resourceBundle) {
-
         handleIntegerField(tradeSizeLimit);
         handleIntegerField(orderBookSizeLimit);
-        handleIntegerField(upticketCount);
+        handleIntegerField(upTicketCount);
         handleIntegerField(downTicketCount);
-
         bindEveryOne();
-
         orderBookSizeLimit.setText(Constants.BOOK_SIZE_DEFAULT_LIMIT);
         tradeSizeLimit.setText(Constants.TRADE_SIZE_DEFAULT_LIMIT);
-        upticketCount.setText(String.valueOf(Constants.DEFAULT_UPTICKET));
+        upTicketCount.setText(String.valueOf(Constants.DEFAULT_UPTICKET));
         downTicketCount.setText(String.valueOf(Constants.DEFAULT_DOWNTICKET));
-
         orderBookService.init();
-
     }
 
     private void handleIntegerField(final TextField tf) {
@@ -76,7 +78,7 @@ public class MainApplicationController implements Initializable {
     private void bindEveryOne() {
         orderBookSizeLimit.textProperty().bindBidirectional(orderBookService.getOrderBookSizeLimitPropertyProperty());
         tradeSizeLimit.textProperty().bindBidirectional(tradingService.getTradeSizeLimitPropertyProperty());
-        upticketCount.textProperty().bindBidirectional(tradingService.getUpticketLimitProperty());
+        upTicketCount.textProperty().bindBidirectional(tradingService.getUpticketLimitProperty());
         downTicketCount.textProperty().bindBidirectional(tradingService.getDownticketLimitProperty());
         asksListView.itemsProperty().bind(orderBookService.getAsks());
         bidsListView.itemsProperty().bind(orderBookService.getBids());

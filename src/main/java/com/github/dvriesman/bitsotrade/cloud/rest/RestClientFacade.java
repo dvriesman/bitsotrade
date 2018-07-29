@@ -11,16 +11,26 @@ import retrofit2.Response;
 
 import java.io.IOException;
 
+/***
+ * Facade of all rest calls to bitsotrade
+ */
 public class RestClientFacade {
 
     private OrderBookService orderBookService;
     private TradeService tradeService;
 
+    /**
+     * Constructor that create Retrofit Abstraction APIS
+     */
     public RestClientFacade() {
         orderBookService = RetrofitClientBuilder.createService(OrderBookService.class, Constants.BASE_URL);
         tradeService = RetrofitClientBuilder.createService(TradeService.class, Constants.BASE_URL);
     }
 
+    /***
+     * Request a full OrderBook
+     * @return OrderBookResponse Full Order Book datastructure
+     */
     public OrderBookResponse getOrderBook() {
         Call<OrderBookResponse> call = orderBookService.getOrderBook(Constants.BOOK, false);
         try {
@@ -32,6 +42,11 @@ public class RestClientFacade {
         }
     }
 
+    /***
+     * Request X trades
+     * @param limit Number of trades to get
+     * @return TradesResponse Trades datastructure
+     */
     public TradesResponse getTrades(Integer limit) {
         Call<TradesResponse> call = tradeService.getTrades(Constants.BOOK, limit);
         try {
