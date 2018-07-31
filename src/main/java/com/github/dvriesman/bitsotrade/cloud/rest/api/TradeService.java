@@ -11,6 +11,9 @@ import retrofit2.http.Query;
 public interface TradeService {
 
     @GET("trades")
+    Call<TradesResponse> getTrades(@Query("book") String book, @Query("limit") Integer limit, @Query("marker") String marker);
+
+    @GET("trades")
     Call<TradesResponse> getTrades(@Query("book") String book, @Query("limit") Integer limit);
 
 

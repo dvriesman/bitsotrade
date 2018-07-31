@@ -43,7 +43,9 @@ public class TradingService {
         final TradesResponse tradeResponse = restClientFacade.getTrades(getLimit());
         final List<TradesPayload> tradesPayloads = tradingStrategy.runStrategy(tradeResponse.getPayload(), getUpticketCount(), getDownticketCount());
         Platform.runLater(() -> {
-            trades.set(FXCollections.observableArrayList(tradesPayloads.stream().limit(getLimit()).collect(Collectors.toList())));
+            final List<TradesPayload> listToShow = tradesPayloads.stream().limit(getLimit()).collect(Collectors.toList());
+            System.out.println("ONLY TO DEBUG - (I SHOULD PUT LOG4J, BUT FOR SIMPLEST DEBUG): Trade list size:  " + listToShow.size());
+            trades.set(FXCollections.observableArrayList(listToShow));
         });
     }
 
