@@ -13,12 +13,18 @@ import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -28,7 +34,11 @@ import java.util.stream.Collectors;
 @Service
 public class OrderBookService {
 
+    Logger logger = LoggerFactory.getLogger(OrderBookService.class);
+
     private BigInteger currentSequence;
+
+    private Queue<DiffOrder> processQueue = new ConcurrentLinkedQueue<>();
 
     @Autowired
     private RestClientFacade restClientFacade;
@@ -85,14 +95,26 @@ public class OrderBookService {
      * @param diffOrder DiffOrder datastructure
      */
     public void updateOrderBook(DiffOrder diffOrder) {
-        if (currentSequence != null && diffOrder != null) {
-            if (diffOrder.getSequence() != null && diffOrder.getSequence().compareTo(currentSequence) > 0) {
-                List<DiffOrderPayload> payload = diffOrder.getPayload();
-                if (payload != null) {
-                    currentSequence = diffOrder.getSequence();
-                    payload.stream().forEach(e -> updateBook(e));
+        logger.debug("INTO LIST: " + (diffOrder != null ? diffOrder.getSequence() : "(diffOrder is null)"));
+        processQueue.offer(diffOrder);
+    }
+
+    @Scheduled(fixedRate = 1000)
+    private void scheduleUpdateBooks() {
+        DiffOrder diffOrder = null;
+        if (currentSequence != null) {
+            while((diffOrder = processQueue.poll()) != null) {
+                logger.debug("GET OUT FROM LIST: " + diffOrder.getSequence());
+                if (diffOrder.getSequence() != null && diffOrder.getSequence().compareTo(currentSequence) > 0) {
+                    logger.debug("SYNC: " + diffOrder.getSequence());
+                    List<DiffOrderPayload> payload = diffOrder.getPayload();
+                    if (payload != null) {
+                        currentSequence = diffOrder.getSequence();
+                        payload.stream().forEach(e -> updateBook(e));
+                    }
                 }
             }
+
         }
     }
 
@@ -132,7 +154,7 @@ public class OrderBookService {
                     break;
                 }
                 default: {
-                    //TODO slf4j
+                    logger.error("INVALID DIFF ORDER STATUS RECEIVED!");
                     break;
                 }
             }

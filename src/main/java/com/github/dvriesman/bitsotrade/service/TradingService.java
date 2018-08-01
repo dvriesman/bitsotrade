@@ -1,10 +1,10 @@
 package com.github.dvriesman.bitsotrade.service;
 
 import com.github.dvriesman.bitsotrade.Constants;
+import com.github.dvriesman.bitsotrade.cloud.rest.RestClientFacade;
 import com.github.dvriesman.bitsotrade.components.TradingStrategy;
 import com.github.dvriesman.bitsotrade.model.domain.TradesPayload;
 import com.github.dvriesman.bitsotrade.model.domain.TradesResponse;
-import com.github.dvriesman.bitsotrade.cloud.rest.RestClientFacade;
 import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
@@ -38,13 +38,12 @@ public class TradingService {
      * Update trades using REST (as request in the exercise to pool and not use websockets).
      * Interval is 1 second.
      */
-    @Scheduled(fixedRate = 1000)
+    @Scheduled(fixedRate = 2000)
     public void updateTrade() {
         final TradesResponse tradeResponse = restClientFacade.getTrades(getLimit());
         final List<TradesPayload> tradesPayloads = tradingStrategy.runStrategy(tradeResponse.getPayload(), getUpticketCount(), getDownticketCount());
         Platform.runLater(() -> {
             final List<TradesPayload> listToShow = tradesPayloads.stream().limit(getLimit()).collect(Collectors.toList());
-            System.out.println("ONLY TO DEBUG - (I SHOULD PUT LOG4J, BUT FOR SIMPLEST DEBUG): Trade list size:  " + listToShow.size());
             trades.set(FXCollections.observableArrayList(listToShow));
         });
     }
